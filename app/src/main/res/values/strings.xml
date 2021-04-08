@@ -3,4 +3,6 @@
     <string name="app_name_full_form">Astronomy Picture of the Day</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="alert_dialog_title">Do you want to proceed ?</string>
+    <string name="alert_dialog_message">Today date is selected as default for non-selected dates</string>
 </resources>

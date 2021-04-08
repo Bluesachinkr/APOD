@@ -1,5 +1,7 @@
 package com.android.apod.data.api
 
+import android.content.Context
+import android.widget.Toast
 import com.android.apod.data.db.ApodDatabse
 import com.android.apod.data.model.AstronomyPicture
 import kotlinx.coroutines.GlobalScope
@@ -10,8 +12,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ApodService {
+class ApodService(context: Context) {
     private var retrofit: Retrofit
+    private val context = context
 
     init {
         retrofit = Retrofit.Builder()
@@ -20,10 +23,7 @@ class ApodService {
             .build()
     }
 
-    open fun getApods(
-        start_date: String,
-        end_date: String, database: ApodDatabse
-    ) {
+    open fun getApods(start_date: String, end_date: String, database: ApodDatabse) {
         val service: ApodApiAService = retrofit.create(ApodApiAService::class.java)
         val map = hashMapOf<String, String>()
         map.put("end_date", end_date)
@@ -44,6 +44,7 @@ class ApodService {
             }
 
             override fun onFailure(call: Call<List<AstronomyPicture>>, t: Throwable) {
+                Toast.makeText(context, "Failed on loading data", Toast.LENGTH_SHORT).show()
             }
         })
     }

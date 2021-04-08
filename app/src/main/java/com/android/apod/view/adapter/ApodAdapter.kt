@@ -1,6 +1,7 @@
 package com.android.apod.view.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.apod.R
 import com.android.apod.data.model.AstronomyPicture
 import com.android.apod.view.ui.OnApodItemClickListener
-import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 
 class ApodAdapter(
     context: Context,
@@ -35,12 +36,15 @@ class ApodAdapter(
     }
 
     override fun onBindViewHolder(holder: ApodViewholder, position: Int) {
-        if (mAstronomyPictures != null) {
-            val item = mAstronomyPictures[position]!!
+        mAstronomyPictures?.let {
+            val item = it[position]
             holder.itemTitle.text = item.title
             holder.itemDate.text = item.date
             if (item.media_type.equals("image")) {
-                Glide.with(context).load(item.url).into(holder.itemImage)
+                Picasso.with(context).load(item.url).into(holder.itemImage)
+            } else {
+                holder.itemImage.setImageDrawable(null)
+                Log.d("Adapter", "Image not available")
             }
             holder.itemView.setOnClickListener {
                 listener.onItemOpen(item)
