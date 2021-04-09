@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.apod.R
+import com.android.apod.data.db.ApodDatabse
 import com.android.apod.data.model.AstronomyPicture
 import com.android.apod.view.adapter.ApodAdapter
 import com.android.apod.view.viewmodel.ApodViewModel
@@ -24,9 +25,11 @@ class ApodActivity : AppCompatActivity(), OnApodItemClickListener {
     private lateinit var fragment: ApodItemFragment
     private lateinit var start_date: String
     private lateinit var end_date: String
+
     private lateinit var mApodList: MutableList<AstronomyPicture>
     private val fragmentManager: FragmentManager = supportFragmentManager
     private var isItemOpen: Boolean = false
+    private var database: ApodDatabse? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +49,19 @@ class ApodActivity : AppCompatActivity(), OnApodItemClickListener {
         this.apodRecycler = findViewById(R.id.itemRecyclerView)
         this.apodItemContainer = findViewById(R.id.itemContainer)
         mApodList = mutableListOf()
+        loadViewModel()
+
+        this.fragment = ApodItemFragment.newInstance(this, this as OnApodItemClickListener)
+        fragmentManager.beginTransaction().add(R.id.itemContainer, fragment).commit()
+        intitializeRecycler()
+    }
+
+    private fun loadViewModel() {
+        //databse instance
+        database = ApodDatabse.getInstance(this)
 
         this.mApodViewModel = ViewModelProviders.of(this).get(ApodViewModel::class.java)
-        this.mApodViewModel.init(this, start_date, end_date)
+        this.mApodViewModel.init(start_date, end_date, database)
         this.mApodViewModel.getApods(start_date, end_date)
             .observe(this, object : Observer<List<AstronomyPicture>> {
                 override fun onChanged(t: List<AstronomyPicture>?) {
@@ -58,10 +71,6 @@ class ApodActivity : AppCompatActivity(), OnApodItemClickListener {
                     apodAdapter.notifyDataSetChanged()
                 }
             })
-
-        this.fragment = ApodItemFragment.newInstance(this, this as OnApodItemClickListener)
-        fragmentManager.beginTransaction().add(R.id.itemContainer, fragment).commit()
-        intitializeRecycler()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.android.apod.R
 import com.android.apod.utils.ApodFileUtils
+import com.android.apod.utils.DateTimeListener
+import com.android.apod.utils.DateTimeUtils
 import java.lang.StringBuilder
 import java.util.*
 
@@ -21,8 +23,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var submitBtn: Button
     private lateinit var start_date_picker: TextView
     private lateinit var end_date_picker: TextView
-    private lateinit var date_picker: DatePicker
-    private lateinit var buttonsLayout: LinearLayout
     private lateinit var todayDate: String
     private var startDate: String = ""
     private var endDate: String = ""
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         start_date_picker.setOnClickListener(this)
         end_date_picker.setOnClickListener(this)
 
-        todayDate = defaultDate()
+        todayDate = DateTimeUtils.defaultDate()
     }
 
     override fun onClick(v: View?) {
@@ -87,59 +87,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         dialog.create().show()
     }
 
-    // comment: move this function to a separate DateTimeUtil class.
-    // this is a utility function that can be used from any activity, so keep it one util class and call from any activity
-    private fun chooseDate(textView: TextView) {
-        val calender: Calendar = Calendar.getInstance()
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            val dialog = DatePickerDialog(
-                this,
-                object : DatePickerDialog.OnDateSetListener {
-                    override fun onDateSet(
-                        view: DatePicker?,
-                        year: Int,
-                        month: Int,
-                        dayOfMonth: Int
-                    ) {
-                        val date: String = setDate(year, month + 1, dayOfMonth)
-                        textView.text = date
-                    }
-
-                },
-                calender.get(Calendar.YEAR),
-                calender.get(Calendar.MONTH),
-                calender.get(Calendar.DAY_OF_MONTH)
-            )
-            dialog.show()
-        }
-    }
-
-    // comment: move this function to a separate DateTimeUtil class.
-    // this is a utility function that can be used from any activity, so keep it one util class and call from any activity
-    private fun setDate(year: Int, month: Int, dayOfMonth: Int): String {
-        val builder = StringBuilder("")
-        builder.append(year)
-        builder.append("-")
-        if (month < 10) {
-            builder.append("0")
-        }
-        builder.append(month)
-        builder.append("-")
-        if (dayOfMonth < 10) {
-            builder.append("0")
-        }
-        builder.append(dayOfMonth)
-        return builder.toString()
-    }
-
-    // comment: move this function to a separate DateTimeUtil class.
-    // this is a utility function that can be used from any activity, so keep it one util class and call from any activity
-    private fun defaultDate(): String {
-        val calendar = Calendar.getInstance()
-        return setDate(
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
+    fun chooseDate(textView: TextView) {
+        DateTimeUtils.chooseDate(this, object : DateTimeListener {
+            override fun chooseDate(date: String) {
+                textView.text = date
+            }
+        })
     }
 }

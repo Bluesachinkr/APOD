@@ -1,16 +1,13 @@
 package com.android.apod.utils
 
-
-import android.os.Environment
+import android.content.Context
 import java.io.File
 
 class ApodFileUtils {
     companion object {
-        fun getDirectory(): String? {
+        fun getDirectory(context: Context): String? {
 
-            // comment: getExternalStorageDirectory() is deprecated, use a newer non-deprecated function
-
-            val storage = Environment.getExternalStorageDirectory().absolutePath
+            val storage = context.getExternalFilesDir(null)?.absolutePath
             val directory = File(storage, "APOD")
             if (!directory.exists()) {
                 if (!directory.mkdirs()) {

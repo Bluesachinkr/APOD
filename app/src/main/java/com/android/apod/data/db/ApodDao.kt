@@ -9,6 +9,9 @@ interface ApodDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(picture: List<AstronomyPicture>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(picture: AstronomyPicture)
+
     @Query("SELECT * FROM AstronomyPicture WHERE  date BETWEEN (:startDate) and (:endDate)")
     fun get(startDate: String, endDate: String): List<AstronomyPicture>
 }

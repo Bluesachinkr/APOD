@@ -1,10 +1,9 @@
 package com.android.apod.data.api
 
-import android.content.Context
-import android.widget.Toast
 import com.android.apod.data.db.ApodDatabse
 import com.android.apod.data.model.AstronomyPicture
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -12,12 +11,21 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ApodService(context: Context) {
+class ApodService {
+
     private var retrofit: Retrofit
-    private val context = context
+
+    companion object {
+        private var instance: ApodService? = null
+        fun getInstance(): ApodService {
+            if (instance == null) {
+                instance = ApodService()
+            }
+            return instance!!
+        }
+    }
 
     init {
-        // comment: make retrofit instance a singleton, if don't know what is singleton, read about it
         retrofit = Retrofit.Builder()
             .baseUrl("https://api.nasa.gov/planetary/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -45,7 +53,6 @@ class ApodService(context: Context) {
             }
 
             override fun onFailure(call: Call<List<AstronomyPicture>>, t: Throwable) {
-                Toast.makeText(context, "Failed on loading data", Toast.LENGTH_SHORT).show()
             }
         })
     }
