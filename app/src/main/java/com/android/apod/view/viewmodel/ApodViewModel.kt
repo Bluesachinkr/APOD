@@ -21,6 +21,14 @@ class ApodViewModel : ViewModel() {
         saveDataInDatabase(startDate, endDate)
     }
 
+    // comment: don't pass context to a ViewModel
+    // you can pass service an database instead from activity
+
+    // comment:
+    // ViewModels should have only business logic. it should n't have ui elements or context of the activity
+    // the viewmodel reference should be there in activity, viewmodel should not have any reference to acvitity
+    // you tell me why we do like this ?
+
     fun saveDataInDatabase(startDate: String, endDate: String) {
         database?.let {
             val service = context?.let { it1 -> ApodService(it1) }

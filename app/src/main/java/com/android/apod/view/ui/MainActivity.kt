@@ -87,6 +87,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         dialog.create().show()
     }
 
+    // comment: move this function to a separate DateTimeUtil class.
+    // this is a utility function that can be used from any activity, so keep it one util class and call from any activity
     private fun chooseDate(textView: TextView) {
         val calender: Calendar = Calendar.getInstance()
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -112,6 +114,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    // comment: move this function to a separate DateTimeUtil class.
+    // this is a utility function that can be used from any activity, so keep it one util class and call from any activity
     private fun setDate(year: Int, month: Int, dayOfMonth: Int): String {
         val builder = StringBuilder("")
         builder.append(year)
@@ -128,6 +132,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         return builder.toString()
     }
 
+    // comment: move this function to a separate DateTimeUtil class.
+    // this is a utility function that can be used from any activity, so keep it one util class and call from any activity
     private fun defaultDate(): String {
         val calendar = Calendar.getInstance()
         return setDate(

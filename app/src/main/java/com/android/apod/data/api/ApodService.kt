@@ -17,6 +17,7 @@ class ApodService(context: Context) {
     private val context = context
 
     init {
+        // comment: make retrofit instance a singleton, if don't know what is singleton, read about it
         retrofit = Retrofit.Builder()
             .baseUrl("https://api.nasa.gov/planetary/")
             .addConverterFactory(GsonConverterFactory.create())

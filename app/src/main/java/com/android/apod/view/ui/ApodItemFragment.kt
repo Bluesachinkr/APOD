@@ -98,7 +98,10 @@ class ApodItemFragment(context: Context, listener: OnApodItemClickListener) : Fr
             }
         }
     }
-
+    
+    // comment: make a separate class to check run time permissions
+    // and call that class from any fragment or activity
+    // like this - https://gist.github.com/Asutosh11/d04bee4ae8e7238a52da24476ff158c5
     private fun checkPermissions() {
         val perms = arrayOf(
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
